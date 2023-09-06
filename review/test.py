@@ -1,8 +1,5 @@
+test = input("type something");
+float(test);
 
 
-top_speed = input("What is the top speed:");
-distance = input("What is the distance travled:");
-
-
-
-print("the top speed is ", top_speed, "\ndistance is ", distance);
+print("hello world this is a test print test two three", test ,sep= "@@@@@@@@@@@@@@@@")
