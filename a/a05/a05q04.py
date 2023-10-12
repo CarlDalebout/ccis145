@@ -32,8 +32,7 @@ def decrypt_n(n = 1):
         print(new_string)
 
 def main():
-    roll_dice()
-    # encrypt_n(2)
-    # decrypt_n(2)
+    encrypt_n(2)
+    decrypt_n(2)
 
 main()

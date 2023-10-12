@@ -9,7 +9,14 @@ def roll_dice():
         dice_2 = random.randint(1, 6)
         print(dice_1, dice_2, sep= "\t")
 
-def main():
-    roll_dice()
+def even_or_odd(i):
+    if(i % 2 == 0):
+        print("even")
+    else:
+        print("odd")
 
-main()
+
+def main():
+    even_or_odd(random.randint(0, sys.maxsize))
+
+main() 
