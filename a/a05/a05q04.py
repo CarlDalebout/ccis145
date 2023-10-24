@@ -60,7 +60,8 @@ def find_shift():
 
 
 def main():
-    encrypt_n(random.randint(1, 25))
+    amount = int(input("enter encrypte amount: "))
+    encrypt_n(amount)
     find_shift()
 
 main()

@@ -1,11 +1,12 @@
-n = 5
-i = 0
-while(True):
-    print("hello world: ", i)
-    i += 1
+list_ex = ['a', ['b', ['c', 'd'], 'e', 'f'], 'g', 'h']
 
-if(0 < n < 10):
-    print("the expresion works")
+list_test = [
+                ["James",   90, 30, 85],
+                ["Robert",  70, 65, 80],
+                ["Bill",    100,80, 60],
+                ["Jeff",    95, 78, 60],
+                ["Bob",     0,   0,  0]
+            ]
 
-else:
-    print ("the expression does not work")
+print(list_ex[1][1][0])
+print(list_ex)
