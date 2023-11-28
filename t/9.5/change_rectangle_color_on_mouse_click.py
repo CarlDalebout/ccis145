@@ -1,4 +1,5 @@
 import pygame
+import random
 import sys
 
 pygame.init()
@@ -10,6 +11,8 @@ from pygame.locals import (
     K_RIGHT,
     K_ESCAPE,
     KEYDOWN,
+    KEYUP,
+    MOUSEBUTTONDOWN,
     QUIT,
 )
 
@@ -21,8 +24,14 @@ pygame.display.set_caption('stars')
 screen = pygame.display.set_mode((screen_width, screen_height) , 0 , 32)
 pygame.display.set_caption('up_down_movement')
 
-WHITE = (255 , 255 , 255)
-BLUE  = (0   ,   0 , 255)
+i = 0
+
+colors = [(0,    0,      0)
+         ,(255,  0,      0)
+         ,(0,    255,    0)
+         ,(0,    0,      255)
+         ,(128,  0,      128)
+         ,(255,  165,    0)]
 
 up_pressed = False
 down_pressed = False
@@ -38,7 +47,7 @@ FPS = 60 # frames per second setting
 fpsClock = pygame.time.Clock ()
 
 while True :
-    screen.fill( WHITE )
+    screen.fill((255, 255, 255))
 
     if up_pressed and down_pressed:
         {}
@@ -60,8 +69,13 @@ while True :
                 up_pressed = False
             if event.key == pygame.K_DOWN:
                 down_pressed = False
+        if event . type == pygame . MOUSEBUTTONDOWN :
+            # A mouse button has been pressed
+            if event . button == 1:
+                i = random.randint(0, 5)
     
-    pygame.draw.rect(screen, BLUE, (rect_x, rect_y, rect_width, rect_height))
+    pygame.draw.rect(screen, colors[i], (rect_x, rect_y, rect_width, rect_height))
+
 
     pygame.display.update()
     # Ensure the loop runs
