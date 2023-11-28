@@ -15,20 +15,28 @@ pygame . display . set_caption ('Text-Animation-and-Sound-Effects')
 pygame.font.init()
 font = pygame.font.SysFont('freesansbold ', 36)
 
+
+
 text = font.render("Hello , Pygame!", True , (0, 0, 255))
 text_location_x = 400 - text.get_width () // 2
 text_location_y = 300 - text.get_height () // 2
-text_speed_x = 0.02
-text_speed_y = 0.015
+text_speed_x = 4
+text_speed_y = 3
 
 # Load sound effect and background music
 running = True
 coin_sound = pygame.mixer.Sound('coin_effect.wav')
+coin_sound.set_volume(5)
 pygame.mixer.music.load('game_background_music.mp3')
 
 # Play background music on loop
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_valume(0.5)
+pygame.mixer.music.set_volume(0.25)
+
+FPS = 60 # frames per second setting
+# Initialize a clock object to control frame rate
+fpsClock = pygame.time.Clock ()
+
 
 running = True
 while running :
@@ -54,6 +62,7 @@ while running :
     
 
     pygame.display.update()
+    fpsClock.tick(FPS)
 
 pygame . mixer . music . stop () # Stop background music
 pygame . quit ()

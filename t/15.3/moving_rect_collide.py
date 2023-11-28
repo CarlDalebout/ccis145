@@ -3,6 +3,7 @@ import random
 import sys
 
 pygame.init()
+pygame.mixer.init() # Initialize the mixer module
 
 from pygame.locals import (
     K_UP,
@@ -22,19 +23,21 @@ pygame.display.set_caption('stars')
 
 # set up the window
 screen = pygame.display.set_mode((screen_width, screen_height) , 0 , 32)
-pygame.display.set_caption('up_down_movement')
+pygame.display.set_caption('moving_rect_collide')
 
 up_pressed = False
 down_pressed = False
 left_pressed = False
 right_pressed = False
 
-rect_x = screen_width/2
-rect_y = screen_height/2
-rect_width = 50
-rect_height = 30
-rect_speed = 5
-rect_color = (0, 0, 255)
+player_rect = pygame.Rect(random.randint(50, screen_height-50), random.randint(50, screen_width-50), 50, 50)
+player_image = pygame.image.load('')
+rect_speed = 2
+
+static_rect = pygame.Rect(screen_width/2 - 50, screen_height/2 - 50, 100, 100)
+static_rect_color = (0, 0, 255)
+
+coin_sound = pygame.mixer.Sound('coin_effect.wav')
 
 FPS = 60 # frames per second setting
 # Initialize a clock object to control frame rate
@@ -46,16 +49,44 @@ while True :
     if up_pressed and down_pressed:
         {}
     elif up_pressed:
-        rect_y -= rect_speed
+        player_rect.y -= rect_speed
     elif down_pressed:
-        rect_y += rect_speed
+        player_rect.y += rect_speed
+    else:
+        {}
 
     if left_pressed and right_pressed:
         {}
     elif left_pressed:
-        rect_x -= rect_speed
+        player_rect.x -= rect_speed
     elif right_pressed:
-        rect_x += rect_speed
+        player_rect.x += rect_speed
+    else:
+        {}
+
+    if player_rect.colliderect(static_rect):
+        coin_sound.play()
+        static_rect_color = (255, 0, 0)
+        if(player_rect.bottom >= static_rect.top and player_rect.top < static_rect.top):
+            player_rect.y -= rect_speed
+        if(player_rect.top <= static_rect.bottom and player_rect.bottom > static_rect.bottom):
+            player_rect.y += rect_speed
+        if(player_rect.left <= static_rect.right and player_rect.right > static_rect.right):
+            player_rect.x += rect_speed
+        if(player_rect.right >= static_rect.left and player_rect.left < static_rect.left):
+            player_rect.x -= rect_speed
+    else:
+        static_rect_color = (0, 0, 255)
+
+    if player_rect.right >= screen_width:
+        player_rect.x = screen_width - player_rect.width
+    if player_rect.left < 0:
+        player_rect.x = 0
+    if player_rect.bottom >= screen_height:
+        player_rect.y = screen_height - player_rect.height
+    if player_rect.top < 0:
+        player_rect.y = 0
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -83,10 +114,11 @@ while True :
             # A mouse button has been pressed
             if event . button == 1:
                 rect_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    
-    pygame.draw.rect(screen, rect_color, (rect_x, rect_y, rect_width, rect_height))
-    pygame.draw.rect(screen, ((255, 0, 0)) ((screen_width/2 - 50), (screen_height/2 - 50), 100, 100))
+
+    pygame.draw.rect(screen, (0, 0, 255), player_rect)
+    pygame.draw.rect(screen, static_rect_color, static_rect)
 
     pygame.display.update()
+
     # Ensure the loop runs
     fpsClock.tick( FPS )
