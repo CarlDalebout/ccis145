@@ -5,10 +5,10 @@ Carl Dalebout
 """
 
 import pygame, math, random, os, sys
-from tankGlobals import *
+from Globals import *
 
 class Player_Ship( pygame.sprite.Sprite ):
-    def __init__(self, screen, name = "Ship Name", position = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2), icon = "cat"):
+    def __init__(self, screen, name = "Ship Name", position = (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2), icon = "Player Ship2"):
         self.screen         = screen
         self.name           = name
         self.icon           = icon
@@ -17,6 +17,7 @@ class Player_Ship( pygame.sprite.Sprite ):
         self.dy             = 0.0
         self.position       = position
         self.icon           = self.Load_Icon( icon )
+        self.icon           = pygame.transform.scale(self.icon, (63, 63))
         self.rect           = self.icon.get_rect()
         self.rect.topleft   = self.position
         self.orig_icon      = self.icon
@@ -59,14 +60,34 @@ class Player_Ship( pygame.sprite.Sprite ):
         return rot_image
         
     def scan_keys(self):
-        keyDown = pygame.key.get_pressed()
+        KeyDown = pygame.key.get_pressed()
         ScanKeys = []
-
+        self.pAction = False     # Storage to see if we have done an action this check?
+        if self.pAction:
+            pass            # We've done an action, stop looking
+        if KeyDown[ScanKeys[P_FORWARD]]:         #move player forward
+            self.Accelerate()
+            self.pAction = True
+        if KeyDown[ScanKeys[P_BACKWARD]]:        #reverse player
+            self.Decelerate()
+            self.pAction = True
+        if KeyDown[ScanKeys[P_STRAFE_LEFT]]:     #move player left
+            self.pAction = True
+        if KeyDown[ScanKeys[P_STRAFE_RIGHT]]:    #move player right
+            self.pAction = True
+        if KeyDown[ScanKeys[P_TURN_LEFT]]:       #rotate player CounterClockwise
+            self.rotateTank(False)
+            self.pAction = True
+        if KeyDown[ScanKeys[P_TURN_RIGHT]]:      #rotate player clockwise
+            self.pAction = True
+        if KeyDown[ScanKeys[P_FIRE_MAIN]]:       #fire tank's main guns
+            self.pAction = True
+       
 
 def main():
     global player
-    playerScreen = pygame.display.set_mode((800, 600))
-    player = Player_Ship(playerScreen, "Hello World", (400, 300))
+    playerScreen = pygame.display.set_mode((SCREEN_SIZE[0], SCREEN_SIZE[1]))
+    player = Player_Ship(playerScreen, "Hello World", (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2))
 
     running = True
     while running:

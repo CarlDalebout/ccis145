@@ -242,7 +242,7 @@ global CRATE_SPAWN_RATE
 GAME_CLOCK          = 0
 FRAME_RATE          = 30
 DEBUG_MODE          = False
-SCREEN_SIZE         = ( 1280, 960 )
+SCREEN_SIZE         = ( 2400, 1800 )
 MAIN_SCREEN         = pygame.Rect( 0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1] - 128 )     # left, top, wide, high
 STATUS_SCREEN       = pygame.Rect( 0, MAIN_SCREEN[3]+1, SCREEN_SIZE[0], 128 )   # left, top, wide, high
 OFF_SCREEN          = ( -500, -500 )
