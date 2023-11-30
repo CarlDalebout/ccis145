@@ -1,12 +1,10 @@
 # Import the pygame module
-import pygame
-import random
+import pygame, random
+from Globals import *
 
+# Initialize pygame
+pygame.init()
 
-
-
-# Import pygame.locals for easier access to key coordinates
-# Updated to conform to flake8 and black standards
 from pygame.locals import (
     K_UP,
     K_DOWN,
@@ -14,79 +12,89 @@ from pygame.locals import (
     K_RIGHT,
     K_ESCAPE,
     KEYDOWN,
+    KEYUP,
+    MOUSEBUTTONDOWN,
     QUIT,
 )
 
-# Define constants for the screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-
-# Define a player object by extending pygame.sprite.Sprite
-# The surface drawn on the screen is now an attribute of 'player'
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Player, self).__init__()
-        self.surf = pygame.Surface((75, 25))
-        self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
-
-def update(self, pressed_keys):
-    if pressed_keys[K_UP]:
-        self.rect.move_ip(0, -5)
-    if pressed_keys[K_DOWN]:
-        self.rect.move_ip(0, 5)
-    if pressed_keys[K_LEFT]:
-        self.rect.move_ip(-5, 0)
-    if pressed_keys[K_RIGHT]:
-        self.rect.move_ip(5, 0)
-
-    if self.rect.left < 0:
-        self.rect.let = 0
-    if self.rect.right > SCREEN_WIDTH:
-        self.rect.right = SCREEN_WIDTH
-    if self.rect.top <= 0:
-        self.rect.top = 0
-    if self.rect.bottom >= SCREEN_HEIGHT:
-        self.rect.bottom = SCREEN_HEIGHT
-
-
-
-# Initialize pygame
-pygame.init()
-
 # Create the screen object
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_SIZE[0], SCREEN_SIZE[1]))
+pygame.display.set_caption("final Project")
 
-# Instantiate player. Right now, this is just a rectangle.
-player = Player()
+player_rect = pygame.Rect(random.randint(50, SCREEN_SIZE[1]-50), random.randint(50, SCREEN_SIZE[0]-50), 50, 50)
+player_image = pygame.image.load('')
+rect_speed = 2
 
-# Variable to keep the main loop running
-running = True
+FPS = 60 # frames per second setting
+# Initialize a clock object to control frame rate
+fpsClock = pygame.time.Clock ()
 
-# Main loop
-while running:
-    # for loop through the event queue
-    for event in pygame.event.get():
+def keyboard(event_list):
+    for event in event_list:
+        # Check for QUIT event. If QUIT, then set running to false.
+        if event.type == QUIT:
+            running = False
         # Check for KEYDOWN event
         if event.type == KEYDOWN:
             # If the Esc key is pressed, then exit the main loop
             if event.key == K_ESCAPE:
                 running = False
-        # Check for QUIT event. If QUIT, then set running to false.
-        elif event.type == QUIT:
-            running = False
+            if event.key == pygame.K_w:
+                w_pressed = True
+            if event.key == pygame.K_s:
+                s_pressed = True
+            if event.key == pygame.K_a:
+                a_pressed = True
+            if event.key == pygame.K_d:
+                d_pressed = True
+            if event.key == pygame.K_SPACE:
+                space_pressed = True
+            if event.key == pygame.K_LEFT: 
+                left_pressed = True
+            if event.key == pygame.K_RIGHT:
+                right_pressed = True
 
-    # Get all the keys currently pressed
-    pressed_keys = pygame.key.get_pressed()
+def update():
+    if PLAYER_KEYS[0] and PLAYER_KEYS[1]:
+        {}
+    elif PLAYER_KEYS[0]:
+        player_rect.y -= rect_speed
+    elif PLAYER_KEYS[1]:
+        player_rect.y += rect_speed
+    else:
+        {}
 
-    player.update(pressed_keys)
+    if PLAYER_KEYS[2] and PLAYER_KEYS[3]:
+        {}
+    elif player_rect[2]:
+        player_rect.x -= rect_speed
+    elif player_rect[3]:
+        player_rect.x += rect_speed
+    else:
+        {}
+
+    if PLAYER_KEYS[5] and PLAYER_KEYS[6]:
+        {}
+    elif PLAYER_KEYS[5]:
+        {}
+    elif PLAYER_KEYS[6]:
+        {}
+
+# Variable to keep the main loop running
+running = True
+# Main loop
+while running:
+    # for loop through the event queue
+    keyboard(pygame.event.get())
+    update()
 
     # Fill the screen with black
     screen.fill((0, 0, 0))
 
-    # Draw the player on the screen
-    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
 
     # Update the display
-    pygame.display.flip()
+    pygame.display.update()
+
+    # Ensure the loop runs
+    fpsClock.tick( FPS )
