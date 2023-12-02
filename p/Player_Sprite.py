@@ -66,10 +66,10 @@ class Player_Ship( pygame.sprite.Sprite ):
         if self.pAction:
             pass            # We've done an action, stop looking
         if KeyDown[ScanKeys[P_FORWARD]]:         #move player forward
-            self.Accelerate()
+            # self.Accelerate()
             self.pAction = True
         if KeyDown[ScanKeys[P_BACKWARD]]:        #reverse player
-            self.Decelerate()
+            # self.Decelerate()
             self.pAction = True
         if KeyDown[ScanKeys[P_STRAFE_LEFT]]:     #move player left
             self.pAction = True

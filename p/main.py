@@ -1,10 +1,11 @@
 # Import the pygame module
-import pygame, random, os
+import pygame, random, os, math
 import Asteroid_Sprite, Lazer_Sprite
 from Globals import *
 
 # Initialize pygame
 pygame.init()
+pygame.mixer.init()
 
 from pygame.locals import (
     K_UP,
@@ -40,15 +41,14 @@ player_rect.y = SCREEN_SIZE[1]/2-player_rect.height
 # features of the ship such as speed, looking angle, fired lazers
 player_angle = 0
 rect_speed = 5
-play_projectiles = []
 
-# Creating image for the Astroids
-png_file = os.path.join("Images", "Asteroid_Brown.png")
-Asteroid_image_org = pygame.image.load(png_file)
-Asteroid_image = pygame.transform.scale(Asteroid_image_org, (119, 119))
+# Creating projectiles from the ship
+player_projectiles = [Lazer_Sprite.Laser(screen, "testLazer2", (SCREEN_SIZE[0]/2, SCREEN_SIZE[1] + 25))]
 
-# creating the rect for the Asteroid for collision
+# creating the list for the Asteroids
 Test_Astteroids = [Asteroid_Sprite.Asteroid(screen, "test"), Asteroid_Sprite.Asteroid(screen, "test", (SCREEN_SIZE[0]/2, 0))]
+Asteroids_max = 5
+# 
 
 FPS = 60 # frames per second setting
 # Initialize a clock object to control frame rate
@@ -73,6 +73,7 @@ def keyboard(event_list):
             # If the Esc key is pressed, then exit the main loop
             if event.key == K_ESCAPE:
                 running = False
+                pygame.quit()
             if event.key == pygame.K_w:
                 # print("w_pressed")
                 PLAYER_KEYS[0] = True
@@ -86,7 +87,14 @@ def keyboard(event_list):
                 # print("d_pressed")
                 PLAYER_KEYS[3] = True
             if event.key == pygame.K_SPACE:
-                play_projectiles.append(())
+                if len(player_projectiles) <= 5:
+                    rag_angle = player_angle * 3.1415 / 180
+                    lazer_x = math.cos(rag_angle)
+                    lazer_y = math.sin(rag_angle)
+                    M = max(abs(lazer_x), abs(lazer_y))
+                    lazer_x = (player_rect.width/2 * lazer_x / M)  + player_rect.x
+                    lazer_y = (player_rect.height/2 * lazer_y / M) + player_rect.y
+                    player_projectiles.append((Lazer_Sprite.Laser(screen, "lazer", (lazer_x, lazer_y), player_angle+90)))
                 PLAYER_KEYS[4] = True
             if event.key == pygame.K_LEFT: 
                 PLAYER_KEYS[5] = True
@@ -141,10 +149,10 @@ def update():
         {}
     elif PLAYER_KEYS[5] == True:
         # print("rotated clockwise")
-        player_angle -= rect_speed
+        player_angle += rect_speed
     elif PLAYER_KEYS[6] == True:
         # print("rotated counter_clockwise")
-        player_angle += rect_speed
+        player_angle -= rect_speed
 
 # Variable to keep the main loop running
 running = True
@@ -154,11 +162,43 @@ while running:
     keyboard(pygame.event.get())
     update()
 
+    lenght = len(Test_Astteroids)
+    if random.randint(0, 20) == 20:
+        if len(Test_Astteroids) <= Asteroids_max:
+            rag_angle = random.randint(0, 360) * 3.1415 / 180
+            asteroid_x = math.cos(rag_angle)
+            asteroid_y = math.sin(rag_angle)
+            M = max(abs(asteroid_x), abs(asteroid_y))
+            asteroid_x = (SCREEN_SIZE[0] * asteroid_x / M) 
+            asteroid_y = (SCREEN_SIZE[0] * asteroid_y / M)
+            Test_Astteroids.append(Asteroid_Sprite.Asteroid(screen, "Bolder", (asteroid_x, asteroid_y)))
+
+    for index in range(len(Test_Astteroids)):
+        Test_Astteroids[index].update(player_rect.x, player_rect.y)
+    
+    for index in range (len(player_projectiles)):
+        if player_projectiles[index].update() == "OutOfBounds":
+            player_projectiles.pop(index)
+            break
+    
+    for i in range (lenght):
+        for j in range (len(player_projectiles)):
+            if(Test_Astteroids[i].rect.colliderect(player_projectiles[j].rect)):
+                Test_Astteroids.pop(i)
+                player_projectiles.pop(j)
+                Asteroids_max += 2
+                break
+
     # Fill the screen with black
     screen.fill((0, 0, 0))
     
+
     rotate_image(pygame.transform.scale(player_image_org, (63, 63)), (player_rect.x, player_rect.y), player_angle)
-    
+    # screen.blit(player_image, player_rect.topleft)
+
+    for index in range (len(player_projectiles)):
+        screen.blit(player_projectiles[index].icon, player_projectiles[index].rect.topleft)
+
     for index in range (len(Test_Astteroids)):
         screen.blit(Test_Astteroids[index].icon, Test_Astteroids[index].rect.topleft)
 
@@ -167,3 +207,5 @@ while running:
     pygame.display.update()
     # Ensure the loop runs
     fpsClock.tick( FPS )
+
+pygame.quit()

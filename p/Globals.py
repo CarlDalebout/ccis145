@@ -4,7 +4,7 @@
 Carl Dalebout - 2023
 """
 
-import pygame, sys
+import pygame, sys, os
 
 # PATHS
 global IMAGE_PATH
@@ -37,14 +37,24 @@ global GAME_CLOCK
 global FRAME_RATE
 global SCREEN_SIZE
 global MAIN_SCREEN
-global SPEED_DELTA
+global PLAYER_SPEED
 global OFF_SCREEN
 
 GAME_CLOCK      = 0
 FRAME_RATE      = 30
 SCREEN_SIZE     = (1080, 860)
 MAIN_SCREEN     = pygame.Rect( 0, 0, SCREEN_SIZE[0], SCREEN_SIZE[1] - 128 )
+PLAYER_SPEED    = 5
 OFF_SCREEN      = (-200, -200)
+
+# CONST Icons
+global PLAYER_SHIP_ICON
+global ASTEROID_ICON
+global LAZER_ICON
+
+PLAYER_SHIP_ICON    = pygame.image.load(os.path.join(IMAGE_PATH, "Player_Ship2.png"))
+ASTEROID_ICON       = pygame.image.load(os.path.join(IMAGE_PATH, "Asteroid_Brown.png"))
+LAZER_ICON          = pygame.image.load(os.path.join(IMAGE_PATH, "Lazer.png"))
 
 # COLOR CONSTANTS
 global RED
