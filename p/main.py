@@ -1,6 +1,6 @@
 # Import the pygame module
 import pygame, random, os, math
-import Asteroid_Sprite, Lazer_Sprite
+import Asteroid_Sprite, Lazer_Sprite, Player_Sprite
 from Globals import *
 
 # Initialize pygame
@@ -24,29 +24,24 @@ from pygame.locals import (
 screen = pygame.display.set_mode((SCREEN_SIZE[0], SCREEN_SIZE[1]))
 pygame.display.set_caption("final Project")
 
-# Createing the lazer sound to uses when the play fires a lazer
-lazer_file = os.path.join("Sounds", "laser.mp3")
-lazer_sound = pygame.mixer.Sound(lazer_file)
+menu_screen_back_ground = pygame.transform.scale(MENU_BACKGROUND_ICON, (SCREEN_SIZE[0], SCREEN_SIZE[1]))
+menu_screen_back_ground_rect = menu_screen_back_ground.get_rect()
+menu_screen_back_ground_rect.x = 0
+menu_screen_back_ground_rect.y = 0
+
+game_screen_back_ground = pygame.transform.scale(GAME_BACKGROUND_ICON, (SCREEN_SIZE[0], SCREEN_SIZE[1]))
+game_screen_back_ground_rect = game_screen_back_ground.get_rect()
+game_screen_back_ground_rect.x = 0
+game_screen_back_ground_rect.y = 0
+
+pygame.mixer.music.load(os.path.join(MUSIC_PATH, "Music.mp3"))
+pygame.mixer.music.play(-1)
 
 # Creating image for the player ship
-png_file = os.path.join("Images", "Player_Ship2.png")
-player_image_org = pygame.image.load(png_file)
-player_image = pygame.transform.scale(player_image_org, (63, 63))
-
-# creating the rect for the player ship and collision
-player_rect = player_image.get_rect()
-player_rect.x = SCREEN_SIZE[0]/2-player_rect.width
-player_rect.y = SCREEN_SIZE[1]/2-player_rect.height
-
-# features of the ship such as speed, looking angle, fired lazers
-player_angle = 0
-rect_speed = 5
-
-# Creating projectiles from the ship
-player_projectiles = [Lazer_Sprite.Laser(screen, "testLazer2", (SCREEN_SIZE[0]/2, SCREEN_SIZE[1] + 25))]
+player = Player_Sprite.Player_Ship(screen, "Player", (SCREEN_SIZE[0]/2, SCREEN_SIZE[1]/2))
 
 # creating the list for the Asteroids
-Test_Astteroids = [Asteroid_Sprite.Asteroid(screen, "test"), Asteroid_Sprite.Asteroid(screen, "test", (SCREEN_SIZE[0]/2, 0))]
+Test_Asteroids = ["filler", Asteroid_Sprite.Asteroid(screen, "test", (SCREEN_SIZE[0]/2, 0))]
 Asteroids_max = 5
 # 
 
@@ -63,149 +58,143 @@ def rotate_image(image, pos, angle):
     return rotated_image, new_rect 
 
 
-def keyboard(event_list):
-    for event in event_list:
-        # Check for QUIT event. If QUIT, then set running to false.
-        if event.type == QUIT:
-            running = False
-        # Check for KEYDOWN event
-        if event.type == KEYDOWN:
-            # If the Esc key is pressed, then exit the main loop
-            if event.key == K_ESCAPE:
-                running = False
+# Intro
+running = True
+while running: 
+
+    # checking if the player pushes a button
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
                 pygame.quit()
-            if event.key == pygame.K_w:
-                # print("w_pressed")
-                PLAYER_KEYS[0] = True
-            if event.key == pygame.K_s:
-                # print("s_pressed")
-                PLAYER_KEYS[1] = True
-            if event.key == pygame.K_a:
-                # print("a_pressed")
-                PLAYER_KEYS[2] = True
-            if event.key == pygame.K_d:
-                # print("d_pressed")
-                PLAYER_KEYS[3] = True
-            if event.key == pygame.K_SPACE:
-                if len(player_projectiles) <= 5:
-                    rag_angle = player_angle * 3.1415 / 180
-                    lazer_x = math.cos(rag_angle)
-                    lazer_y = math.sin(rag_angle)
-                    M = max(abs(lazer_x), abs(lazer_y))
-                    lazer_x = (player_rect.width/2 * lazer_x / M)  + player_rect.x
-                    lazer_y = (player_rect.height/2 * lazer_y / M) + player_rect.y
-                    player_projectiles.append((Lazer_Sprite.Laser(screen, "lazer", (lazer_x, lazer_y), player_angle+90)))
-                PLAYER_KEYS[4] = True
-            if event.key == pygame.K_LEFT: 
-                PLAYER_KEYS[5] = True
-            if event.key == pygame.K_RIGHT:
-                PLAYER_KEYS[6] = True
-        if event.type == KEYUP:
-            # If the Esc key is pressed, then exit the main loop
-            if event.key == pygame.K_w:
-                # print("w_not_pressed")
-                PLAYER_KEYS[0] = False
-            if event.key == pygame.K_s:
-                # print("s_not_pressed")
-                PLAYER_KEYS[1] = False
-            if event.key == pygame.K_a:
-                # print("a_not_pressed")
-                PLAYER_KEYS[2] = False
-            if event.key == pygame.K_d:
-                # print("d_not_pressed")
-                PLAYER_KEYS[3] = False
-            if event.key == pygame.K_SPACE:
-                PLAYER_KEYS[4] = False
-            if event.key == pygame.K_LEFT: 
-                PLAYER_KEYS[5] = False
-            if event.key == pygame.K_RIGHT:
-                PLAYER_KEYS[6] = False
+            else:
+                running = False
 
-def update():
-    global player_rect
-    global player_image
-    global player_angle
 
-    if PLAYER_KEYS[0] == True and PLAYER_KEYS[1] == True:
-        {}
-    elif PLAYER_KEYS[0] == True:
-        # print("moved up")
-        player_rect.y -= rect_speed
-    elif PLAYER_KEYS[1] == True:
-        # print("moved down")
-        player_rect.y += rect_speed
+    insFont = pygame.font.SysFont("Courier New", 20)
+    insLabels = []
+    instructions = (
+    #12345678901234567890123456789012345678901234567890123456789012345678901234567890
+    "                                   Asteroid                                    ",
+    "-------------------------------------------------------------------------------",
+    "",
+    "                           --== Instructions: ==--                             ",
+    "  This is a game that involves a carriar ship lost in space having to survive  ",
+    "                the onslaught of asteroids to drop off its cargo               ",    
+    "",
+    "",
+    "                              --== Weapon ==--                                 ",
+    "      The Ship is equipped is a powerfull lazer capable of blasting appart     ",
+    "                         asteroids with one shot how lucky                     ",
+    "",
+    "",
+    "                           --== Default Controls ==--                          ",
+    "           MOVE_UP   MOVE_DOWN   MOVE_LEFT  MOVE_RIGHT   Fire                  ",
+    "               W         S           A          D        Space                 ",
+    "",
+    "",
+    "                       <<< Press any button to start >>>                       "
+    )
 
-    if PLAYER_KEYS[2] == True and PLAYER_KEYS[3] == True:
-        # print("2 and 3 are pressed")
-        {}
-    elif PLAYER_KEYS[2] == True:
-        # print("moved left")
-        player_rect.x -= rect_speed
-    elif PLAYER_KEYS[3] == True:
-        # print("moved right")
-        player_rect.x += rect_speed
+    for line in instructions:
+        tempLabel = insFont.render(line, 1, GREEN )
+        insLabels.append(tempLabel)
+    
 
-    if PLAYER_KEYS[5] == True and PLAYER_KEYS[6] == True:
-        {}
-    elif PLAYER_KEYS[5] == True:
-        # print("rotated clockwise")
-        player_angle += rect_speed
-    elif PLAYER_KEYS[6] == True:
-        # print("rotated counter_clockwise")
-        player_angle -= rect_speed
+    """
+        Printing of the Main Menu
+    """
+    # screen.fill(0, 0, 0)
+    screen.blit(menu_screen_back_ground, menu_screen_back_ground_rect)
 
+    for i in range(len(insLabels)):
+        screen.blit(insLabels[i], (50, 100+( 20*i ) ))
+           
+    
+    pygame.display.update()
+        # Ensure the loop runs
+    fpsClock.tick( FPS )
+
+# Main Game
+death_counter = 0
 # Variable to keep the main loop running
 running = True
 # Main loop
 while running:
-    # for loop through the event queue
-    keyboard(pygame.event.get())
-    update()
 
-    lenght = len(Test_Astteroids)
-    if random.randint(0, 20) == 20:
-        if len(Test_Astteroids) <= Asteroids_max:
+    # check for player pushing buttons
+    player.scan_keys()
+    # moving player location and checking to firing of lazers
+    player.update()
+
+    #spawning asteroids
+    spawn_rate = 16 +len(Test_Asteroids) - (Asteroids_max//10) #// Asteroids_max
+    if spawn_rate < 1:
+        spawn_rate = 1
+    if random.randint(0, spawn_rate) == spawn_rate:
+        if len(Test_Asteroids) <= Asteroids_max:
             rag_angle = random.randint(0, 360) * 3.1415 / 180
             asteroid_x = math.cos(rag_angle)
             asteroid_y = math.sin(rag_angle)
             M = max(abs(asteroid_x), abs(asteroid_y))
             asteroid_x = (SCREEN_SIZE[0] * asteroid_x / M) 
             asteroid_y = (SCREEN_SIZE[0] * asteroid_y / M)
-            Test_Astteroids.append(Asteroid_Sprite.Asteroid(screen, "Bolder", (asteroid_x, asteroid_y)))
+            Test_Asteroids.append(Asteroid_Sprite.Asteroid(screen, "Bolder", (asteroid_x, asteroid_y), random.randint(63, 255)))
 
-    for index in range(len(Test_Astteroids)):
-        Test_Astteroids[index].update(player_rect.x, player_rect.y)
+    # moving asteroids
+    for index in range(len(Test_Asteroids)-1, 0, -1):
+        Test_Asteroids[index].update(player.rect.x, player.rect.y)
     
-    for index in range (len(player_projectiles)):
-        if player_projectiles[index].update() == "OutOfBounds":
-            player_projectiles.pop(index)
-            break
-    
-    for i in range (lenght):
-        for j in range (len(player_projectiles)):
-            if(Test_Astteroids[i].rect.colliderect(player_projectiles[j].rect)):
-                Test_Astteroids.pop(i)
-                player_projectiles.pop(j)
-                Asteroids_max += 2
-                break
+    # moving lazers
+    for index in range (len(player.projectile_list)-1, 0, -1):
+        if player.projectile_list[index].update() == "OutOfBounds":
+            player.projectile_list.remove(player.projectile_list[index])
+            
+    # checking collision of Asteroids and lazers
+    for i in range (len(Test_Asteroids)-1, 0, -1):
+        for j in range (len(player.projectile_list)-1, 0, -1):
+            if(Test_Asteroids[i].rect.colliderect(player.projectile_list[j].rect)):
+                player.projectile_list.remove(player.projectile_list[j])
+                Test_Asteroids.remove(Test_Asteroids[i])
+                Asteroids_max += 1
 
+    # Checkig for collison of Asteroids and the player
+    for i in range (len(Test_Asteroids)-1, 0, -1):
+        if Test_Asteroids[i].rect.colliderect(player.rect):
+            print(f"you have died {death_counter} times")
+            death_counter += 1
+            if death_counter >= 20:
+                running = False
+
+    """
+        printing the screen the the player sees
+    """
     # Fill the screen with black
     screen.fill((0, 0, 0))
     
+    # Dipslay the Background icon
+    screen.blit(game_screen_back_ground, game_screen_back_ground_rect)
 
-    rotate_image(pygame.transform.scale(player_image_org, (63, 63)), (player_rect.x, player_rect.y), player_angle)
-    # screen.blit(player_image, player_rect.topleft)
+    # printing of the player
+    rotate_image(pygame.transform.scale(player.icon, (63, 63)), (player.rect.x, player.rect.y), player.angle)
+    # screen.blit(player.icon, player.rect.topleft)
 
-    for index in range (len(player_projectiles)):
-        screen.blit(player_projectiles[index].icon, player_projectiles[index].rect.topleft)
+    # printing of the lazers
+    for index in range (len(player.projectile_list)):
+        screen.blit(player.projectile_list[index].icon, player.projectile_list[index].rect.topleft)
 
-    for index in range (len(Test_Astteroids)):
-        screen.blit(Test_Astteroids[index].icon, Test_Astteroids[index].rect.topleft)
-
+    # printing of the asteroids
+    for index in range (len(Test_Asteroids)-1, 0, -1):
+        screen.blit(Test_Asteroids[index].icon, (Test_Asteroids[index].rect.x - Test_Asteroids[index].rect.width/2, Test_Asteroids[index].rect.y - Test_Asteroids[index].rect.height/2))
+        pygame.draw.rect(screen, (255, 0, 0), Test_Asteroids[index].rect, 2)
 
     # Update the display
     pygame.display.update()
     # Ensure the loop runs
     fpsClock.tick( FPS )
+
+print("Show the death screen")
 
 pygame.quit()

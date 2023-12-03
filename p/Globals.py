@@ -8,8 +8,12 @@ import pygame, sys, os
 
 # PATHS
 global IMAGE_PATH
+global SOUND_PATH
+global MUSIC_PATH
 
 IMAGE_PATH = "Images"
+SOUND_PATH = "Sounds"
+MUSIC_PATH = "Music"
 
 # Default Key list
 global P_FORWARD     
@@ -48,13 +52,17 @@ PLAYER_SPEED    = 5
 OFF_SCREEN      = (-200, -200)
 
 # CONST Icons
+global MENU_BACKGROUND_ICON
+global GAME_BACKGROUND_ICON
 global PLAYER_SHIP_ICON
 global ASTEROID_ICON
 global LAZER_ICON
 
-PLAYER_SHIP_ICON    = pygame.image.load(os.path.join(IMAGE_PATH, "Player_Ship2.png"))
-ASTEROID_ICON       = pygame.image.load(os.path.join(IMAGE_PATH, "Asteroid_Brown.png"))
-LAZER_ICON          = pygame.image.load(os.path.join(IMAGE_PATH, "Lazer.png"))
+MENU_BACKGROUND_ICON    = pygame.image.load(os.path.join(IMAGE_PATH, "Main_Menu.png"))
+GAME_BACKGROUND_ICON    = pygame.image.load(os.path.join(IMAGE_PATH, "BackGround.png"))
+PLAYER_SHIP_ICON        = pygame.image.load(os.path.join(IMAGE_PATH, "Player_Ship2.png"))
+ASTEROID_ICON           = pygame.image.load(os.path.join(IMAGE_PATH, "Asteroid_Brown.png"))
+LAZER_ICON              = pygame.image.load(os.path.join(IMAGE_PATH, "Lazer.png"))
 
 # COLOR CONSTANTS
 global RED

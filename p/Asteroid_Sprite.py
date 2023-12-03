@@ -3,15 +3,17 @@ import pygame, math, random, os, sys
 from Globals import *
 
 class Asteroid(pygame.sprite.Sprite):
-    def __init__(self, screen, name = "bolder", position = (0, 0), icon = ASTEROID_ICON):
+    def __init__(self, screen, name = "bolder", position = (0, 0), size = 63, icon = ASTEROID_ICON):
         self.screen         = screen
         self.name           = name
-        self.angle          = 0
-        self.speed          = 2
+        self.size           = size
+        self.speed          = 1
         self.position       = position
         self.orig_icon      = icon
-        self.icon           = pygame.transform.scale(self.orig_icon, (63, 63))
+        self.icon           = pygame.transform.scale(self.orig_icon, (self.size, self.size))
         self.rect           = self.icon.get_rect()
+        self.rect.width     = self.size/2
+        self.rect.height    = self.size/2
         self.rect.topleft   = self.position
         self.orig_icon      = self.icon
 

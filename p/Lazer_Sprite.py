@@ -8,7 +8,7 @@ class Laser(pygame.sprite.Sprite):
         self.name           = name
         self.icon           = icon
         self.angle          = angle
-        self.speed          = 2
+        self.speed          = 5
         rad_angle = self.angle * 3.1415 / 180
         self.dx             = math.cos(rad_angle) * self.speed
         self.dy             = math.sin(rad_angle) * self.speed
