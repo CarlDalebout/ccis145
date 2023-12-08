@@ -1,0 +1,128 @@
+Tank progress
+TODO List
+Setting victory conditions				Saving settings/victory conditions
+
+
+Music System					tankMusic.py
+\_Soundtrack				Completed, no further additions needed
+
+Sound System					tankSound.py
+\_Sound FX SubSystem		Completed, no further additions needed
+\_Sound Effect Choices		May need more variations and explorations
+\_Caching					Complete
+\_Seeking					Complete
+\_Loading					COmplete
+
+Image System					tankImage.py
+\_Caching					Complete
+\_Seeking					Complete
+\_Loading					COmplete
+
+Information System				tankNotify.py
+\_Notifications				Completed, no further additions needed
+
+Tank System						tankTank.py, tankUpgrade.py
+\_Movement						At % Completed (100%)
+| \_Acceleration			Complete
+| \_Deceleration			Complete 5% of current speed braking
+| \_Turning					Complete
+| \_Walls					
+| | \_Damage from Walls		Commented / Removed, Screen is now wrap-around
+| \_Player Collision		
+| | \_Damage from Collision Unused - Future Implementation
+\_Damage						At % Completed ( 100% )
+| \_Taking Damage			Complete
+| \_Healing Damage			Complete, amounts and frequency work and energy drain is constant only while healing
+| \_Scoring Damage			Complete, Being blown up by the other player gives them a point, suicide costs you a point
+\_Energy Tank					At % Completed ( 100% )
+| \_Generating Energy		Complete, amounts and frequency work
+| \_Expending Energy		Complete, Energy is expended for accelerating/braking and firing main/aux
+\_Shield System					At % Completed ( 100% )
+| \_Charging Shields		Complete, amounts and expenditures spent.
+| \_Shield Decay			Complete, amounts and frequency work properly 
+\_Upgrade Systems				At % Completed ( 100% )
+| \_Hull					Complete - controls max HP
+| \_Shields				
+| | \_Capacitor  			Complete - controls max shield and shield decay rate
+| | \_Generator				Complete - controls charge efficiency and charge amount
+| \_Energy				
+| | \_Tank					Complete - controls max energy
+| | \_Generator  			Complete - controls energy amount gained per standard rate
+| \_Repair Nanites			Complete - controls regeneration rate
+| \_Weapons				
+| | \_Ammo Bay				Complete - controls max ammunition for main and aux weapons
+| | \_Main Weapon			
+| | | \_Cannon				Complete - controls max shots on screen and max range for main weapon
+| | | \_Ammo Feed			Complete - controls cooldown time on main cannon
+| | | \_Charger				Unused - would control increased damage of bullets
+| | | \_Barrel				Unused - would control shot patterns
+| | | \_Munitions			Unused - would control MIRVing of bullets
+| | \_Auxillary			
+| | | \_Missiles			Complete - controls missile speed, damage unchanged
+| | | \_Shield Pens			Complete - controls missile speed, damage unchanged
+| | | \_Leeches				Complete - controls missile speed, 25/50% energy drain
+| | | \_Torpedoes			Complete - controls travel speed, damage unchanged
+| | | \_Prox Mines			Complete - controls IFF safety, 0%/90% IFF
+\_Exploding Tank				At % Completed ( 66% )
+  \_Graphics				Complete
+  \_Displaying				Complete, Animates and has a state flag, while in exploding state can't do anything
+  \_Shrapnel				Unused - Future implementation will be 4 tank pieces that cause collision damage
+  \_Bonus Gear to Killer	Incomplete
+  
+Combat System					tankCombat.py, tankBullets.py, tankTorpedoes.py, tankMissiles.py, tankMines.py
+\_Displaying Damage			Complete - Tested
+\_Main Weapons				Projectiles limited by stat on each tank
+| \_Firing					Complete - Tested
+| \_Impacting				Complete - Tested
+| \_Ident Friend/Foe		Complete - Tested, only hits opponent
+| \_Sound FX				Complete
+\_Aux Weapons					At % Completed ( 100% )
+| \_Missiles				
+| | \_Firing				Complete - Tested
+| | \_Impacting				Complete - Tested
+| | \_Ident Friend/Foe		Complete - Tested, only hits opponent
+| | \_Sound FX				Complete
+| \_Shield Pen Missiles
+| | \_Firing				Complete - Tested
+| | \_Impacting				Complete - Tested
+| | \_Ident Friend/Foe		Complete - Tested, only hits opponent
+| | \_Sound FX				Complete
+| \_Leech Missiles
+| | \_Firing				Complete - Tested
+| | \_Impacting				Complete - Tested
+| | \_Ident Friend/Foe		Complete - Tested, only hits opponent
+| | \_Sound FX				Complete
+| \_Torpedoes				
+| | \_Firing				Complete - Tested
+| | \_Impacting				Complete - Tested
+| | \_Ident Friend/Foe		Complete - Tested, only hits opponent
+| | \_Sound FX				Complete
+| \_Prox Mines
+| | \_Firing				Complete - Tested, stationary plant and waits 3 seconds before armed
+| | \_Impacting				Complete - Tested, impacts both on hostile shots and friendly shots, as well as tanks
+| | \_Ident Friend/Foe		Complete - Tested, both ranks work correctly
+| | \_Sound FX				Complete
+| \_Changing Aux Weapons	Only allowing 1.  Ammunition universal
+\_Supply Crates					At % Completed ( 100% )
+  \_Appearance				Complete
+  \_Movement				Complete
+  \_Resupplying Ammo		Complete
+  \_Supplying Upgrades		Complete
+  \_Second Chance System	Complete
+
+Background System				tankBackground.py, tankStatus.py
+\_Main Screen				Complete
+\_Status screen				Complete - tracks each player's stats and visually displays it
+
+Scoreboard System				tankScore.py
+\_Displaying				Complete
+\_Scoring 					Complete - Scoring and Victiory Condition Checking
+  \_High Scores				Unimplemented
+    \_Saving				Unimplemented
+
+Gameplay Core Systems			tankMain.py, tankInit.py, tankGlobals.py 
+\_Main Loop					Complete
+\_Settings					Defaults are initted, need to have file save/loads to allow customization
+| \_Saving					Unimplemented
+\_Levels					Complete? - Players get various weapons and upgrades to modify themselves with, providing differing complexity as time progresses.
+							Not sure how to apply those short of having random terrain features

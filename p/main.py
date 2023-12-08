@@ -58,6 +58,35 @@ def rotate_image(image, pos, angle):
     return rotated_image, new_rect 
 
 
+
+insFont = pygame.font.SysFont("Courier New", 20)
+insLabels = []
+instructions = (
+#12345678901234567890123456789012345678901234567890123456789012345678901234567890
+"                                   Asteroid                                    ",
+"-------------------------------------------------------------------------------",
+"",
+"                           --== Instructions: ==--                             ",
+"  This is a game that involves a carriar ship lost in space having to survive  ",
+"                the onslaught of asteroids to drop off its cargo               ",    
+"",
+"",
+"                              --== Weapon ==--                                 ",
+"      The Ship is equipped is a powerfull lazer capable of blasting appart     ",
+"                         asteroids with one shot how lucky                     ",
+"",
+"",
+"                           --== Default Controls ==--                          ",
+"           MOVE_UP   MOVE_DOWN   MOVE_LEFT  MOVE_RIGHT   Fire                  ",
+"               W         S           A          D        Space                 ",
+"",
+"",
+"                       <<< Press any button to start >>>                       "
+)
+for line in instructions:
+    tempLabel = insFont.render(line, 1, GREEN )
+    insLabels.append(tempLabel)
+
 # Intro
 running = True
 while running: 
@@ -71,38 +100,6 @@ while running:
                 pygame.quit()
             else:
                 running = False
-
-
-    insFont = pygame.font.SysFont("Courier New", 20)
-    insLabels = []
-    instructions = (
-    #12345678901234567890123456789012345678901234567890123456789012345678901234567890
-    "                                   Asteroid                                    ",
-    "-------------------------------------------------------------------------------",
-    "",
-    "                           --== Instructions: ==--                             ",
-    "  This is a game that involves a carriar ship lost in space having to survive  ",
-    "                the onslaught of asteroids to drop off its cargo               ",    
-    "",
-    "",
-    "                              --== Weapon ==--                                 ",
-    "      The Ship is equipped is a powerfull lazer capable of blasting appart     ",
-    "                         asteroids with one shot how lucky                     ",
-    "",
-    "",
-    "                           --== Default Controls ==--                          ",
-    "           MOVE_UP   MOVE_DOWN   MOVE_LEFT  MOVE_RIGHT   Fire                  ",
-    "               W         S           A          D        Space                 ",
-    "",
-    "",
-    "                       <<< Press any button to start >>>                       "
-    )
-
-    for line in instructions:
-        tempLabel = insFont.render(line, 1, GREEN )
-        insLabels.append(tempLabel)
-    
-
     """
         Printing of the Main Menu
     """
@@ -112,13 +109,13 @@ while running:
     for i in range(len(insLabels)):
         screen.blit(insLabels[i], (50, 100+( 20*i ) ))
            
-    
     pygame.display.update()
         # Ensure the loop runs
     fpsClock.tick( FPS )
 
 # Main Game
 death_counter = 0
+font = pygame.font.SysFont('freesansbold', 36)
 # Variable to keep the main loop running
 running = True
 # Main loop
@@ -128,16 +125,20 @@ while running:
     player.scan_keys()
     # moving player location and checking to firing of lazers
     player.update()
-
+    text = font.render(f"Killed Asteroids: {Asteroids_max-5}", True , YELLOW)
     #spawning asteroids
+    
     spawn_rate = 16 +len(Test_Asteroids) - (Asteroids_max//10) #// Asteroids_max
+    
     if spawn_rate < 1:
         spawn_rate = 1
     if random.randint(0, spawn_rate) == spawn_rate:
         if len(Test_Asteroids) <= Asteroids_max:
             rag_angle = random.randint(0, 360) * 3.1415 / 180
+
             asteroid_x = math.cos(rag_angle)
             asteroid_y = math.sin(rag_angle)
+            
             M = max(abs(asteroid_x), abs(asteroid_y))
             asteroid_x = (SCREEN_SIZE[0] * asteroid_x / M) 
             asteroid_y = (SCREEN_SIZE[0] * asteroid_y / M)
@@ -190,11 +191,70 @@ while running:
         screen.blit(Test_Asteroids[index].icon, (Test_Asteroids[index].rect.x - Test_Asteroids[index].rect.width/2, Test_Asteroids[index].rect.y - Test_Asteroids[index].rect.height/2))
         pygame.draw.rect(screen, (255, 0, 0), Test_Asteroids[index].rect, 2)
 
+    screen.blit(text, (SCREEN_SIZE[0]-(text.get_width() + 5), 0))
+
     # Update the display
     pygame.display.update()
     # Ensure the loop runs
     fpsClock.tick( FPS )
 
 print("Show the death screen")
+
+insFont = pygame.font.SysFont("Courier New", 20)
+insLabels = []
+instructions = (
+#12345678901234567890123456789012345678901234567890123456789012345678901234567890
+"                                   Game Over                                   ",
+"-------------------------------------------------------------------------------",
+"",
+"   Your ship has crashed and your cargo has been scattured throughout space    ",
+"",
+"  during your fight for your life you managed to destroy those pesky asteroids ",
+"",
+"",
+"                        Lets see how many you destroyed                        ",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"",
+"                       <<< Press any button to start >>>                       "
+)
+
+for line in instructions:
+        tempLabel = insFont.render(line, 1, GREEN )
+        insLabels.append(tempLabel)
+
+text = font.render(f"Killed Asteroids: {Asteroids_max-5}", True , BLUE)
+
+running = True
+while running:
+
+    # checking if the player pushes a button
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+            else:
+                running = False
+
+    screen.fill((0, 0, 0))
+
+    for i in range(len(insLabels)):
+        screen.blit(insLabels[i], (50, 200+( 20*i )))
+
+    screen.blit(text, (SCREEN_SIZE[0]/2-(text.get_width() + 5)/2, SCREEN_SIZE[1]/2))
+
+    pygame.display.update()
+        # Ensure the loop runs
+    fpsClock.tick( FPS )
+
 
 pygame.quit()
