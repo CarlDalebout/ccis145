@@ -31,7 +31,7 @@ left_pressed = False
 right_pressed = False
 
 player_rect = pygame.Rect(random.randint(50, screen_height-50), random.randint(50, screen_width-50), 50, 50)
-player_image = pygame.image.load('')
+
 rect_speed = 2
 
 static_rect = pygame.Rect(screen_width/2 - 50, screen_height/2 - 50, 100, 100)
