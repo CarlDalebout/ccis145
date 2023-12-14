@@ -1,4 +1,5 @@
 import random
+
 def encrypt_n(n = 1):
     string = input("Please give me a sting to encrypt: ")
     new_string = ""
@@ -33,7 +34,6 @@ def decrypt_shift(string_list, shift_amount):
     return decrypted_string_list
 
 def check_decryption(decrypted_string_list):
-    
     file = open("wordlist.txt", "r")
     words = file.read().splitlines()
     found = True
